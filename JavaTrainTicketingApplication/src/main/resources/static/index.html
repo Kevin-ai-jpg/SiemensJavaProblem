@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Train Ticketing Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #111827;
+            color: #e5e7eb;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: #1f2937;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #374151;
+        }
+        main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+        }
+        h1, h2 {
+            margin-top: 0;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: #cbd5e1;
+        }
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #4b5563;
+            background: #111827;
+            color: #f9fafb;
+        }
+        button {
+            margin-top: 14px;
+            padding: 10px 14px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #1d4ed8;
+        }
+        pre {
+            white-space: pre-wrap;
+            background: #0b1220;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            padding: 12px;
+            overflow: auto;
+            min-height: 80px;
+        }
+        .small {
+            font-size: 13px;
+            color: #9ca3af;
+        }
+        .full {
+            grid-column: 1 / -1;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Train Ticketing Dashboard</h1>
+    <div class="small">Test search and booking features directly from the browser</div>
+</header>
+
+<main>
+    <section class="card">
+        <h2>Direct Search</h2>
+        <label>From</label>
+        <input id="directFrom" value="STA" />
+        <label>To</label>
+        <input id="directTo" value="STD" />
+        <button onclick="searchDirect()">Search Direct</button>
+        <pre id="directResult"></pre>
+    </section>
+
+    <section class="card">
+        <h2>Transfer Search</h2>
+        <label>From</label>
+        <input id="transferFrom" value="STA" />
+        <label>To</label>
+        <input id="transferTo" value="STF" />
+        <label>Minimum Transfer Minutes</label>
+        <input id="minTransferMinutes" type="number" value="5" />
+        <button onclick="searchTransfer()">Search Transfer</button>
+        <pre id="transferResult"></pre>
+    </section>
+
+    <section class="card">
+        <h2>Create Booking</h2>
+        <label>Train Code</label>
+        <input id="bookTrainCode" value="T1" />
+        <label>From Index</label>
+        <input id="bookFromIndex" type="number" value="0" />
+        <label>To Index</label>
+        <input id="bookToIndex" type="number" value="1" />
+        <label>Seats</label>
+        <input id="bookSeats" type="number" value="1" />
+        <label>Passenger Name</label>
+        <input id="bookName" value="Alice" />
+        <label>Passenger Email</label>
+        <input id="bookEmail" value="alice@example.com" />
+        <button onclick="createBooking()">Create Booking</button>
+        <pre id="bookingResult"></pre>
+    </section>
+
+    <section class="card full">
+        <h2>Quick API Notes</h2>
+        <div class="small">
+            Direct search: <code>/api/search/direct?from=STA&to=STD</code><br/>
+            Transfer search: <code>/api/search/transfer?from=STA&to=STF&minTransferMinutes=5</code><br/>
+            Booking: <code>POST /api/book</code>
+        </div>
+    </section>
+    <section class="card">
+        <h2>Admin - Create / Update Train</h2>
+        <label>Train Code</label>
+        <input id="adminTrainCode" value="T4" />
+        <label>Name</label>
+        <input id="adminTrainName" value="Express 4" />
+        <label>Capacity</label>
+        <input id="adminTrainCapacity" type="number" value="80" />
+        <label>Stops JSON</label>
+        <textarea id="adminTrainStops" rows="8" style="width:100%; background:#111827; color:#fff; border:1px solid #4b5563; border-radius:8px;">
+[
+  {"stationCode":"STA","arrival":"","departure":"06:00"},
+  {"stationCode":"STB","arrival":"06:25","departure":"06:30"},
+  {"stationCode":"STD","arrival":"07:10","departure":""}
+]
+    </textarea>
+        <button onclick="createTrain()">Create Train</button>
+        <button onclick="updateTrain()">Update Train</button>
+        <pre id="adminTrainResult"></pre>
+    </section>
+
+    <section class="card">
+        <h2>Admin - View Bookings for Train</h2>
+        <label>Train Code</label>
+        <input id="adminBookingsTrainCode" value="T1" />
+        <button onclick="loadBookings()">Load Bookings</button>
+        <pre id="adminBookingsResult"></pre>
+    </section>
+
+    <section class="card">
+        <h2>Admin - Delay Notification</h2>
+        <label>Train Code</label>
+        <input id="delayTrainCode" value="T1" />
+        <label>Delay Minutes</label>
+        <input id="delayMinutes" type="number" value="15" />
+        <label>Reason</label>
+        <input id="delayReason" value="Technical issue" />
+        <button onclick="sendDelay()">Send Delay Notice</button>
+        <pre id="delayResult"></pre>
+    </section>
+
+</main>
+
+<script>
+    async function fetchJson(url, options = {}) {
+        const response = await fetch(url, options);
+        const text = await response.text();
+        try {
+            return JSON.parse(text);
+        } catch {
+            return text;
+        }
+    }
+    async function createTrain() {
+    const body = {
+    trainCode: document.getElementById('adminTrainCode').value,
+    name: document.getElementById('adminTrainName').value,
+    capacity: parseInt(document.getElementById('adminTrainCapacity').value, 10),
+    stops: JSON.parse(document.getElementById('adminTrainStops').value)
+    };
+
+    const result = await fetchJson('/api/admin/trains', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+    });
+
+    document.getElementById('adminTrainResult').textContent = JSON.stringify(result, null, 2);
+    }
+
+    async function updateTrain() {
+    const code = document.getElementById('adminTrainCode').value;
+    const body = {
+    trainCode: document.getElementById('adminTrainCode').value,
+    name: document.getElementById('adminTrainName').value,
+    capacity: parseInt(document.getElementById('adminTrainCapacity').value, 10),
+    stops: JSON.parse(document.getElementById('adminTrainStops').value)
+    };
+
+    const result = await fetchJson(`/api/admin/trains/${encodeURIComponent(code)}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+    });
+
+    document.getElementById('adminTrainResult').textContent = JSON.stringify(result, null, 2);
+    }
+
+    async function loadBookings() {
+    const code = document.getElementById('adminBookingsTrainCode').value;
+    const result = await fetchJson(`/api/admin/trains/${encodeURIComponent(code)}/bookings`);
+    document.getElementById('adminBookingsResult').textContent = JSON.stringify(result, null, 2);
+    }
+
+    async function sendDelay() {
+    const code = document.getElementById('delayTrainCode').value;
+    const body = {
+    delayMinutes: parseInt(document.getElementById('delayMinutes').value, 10),
+    reason: document.getElementById('delayReason').value
+    };
+
+    const result = await fetchJson(`/api/admin/trains/${encodeURIComponent(code)}/delay`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+    });
+
+    document.getElementById('delayResult').textContent = JSON.stringify(result, null, 2);
+    }
+
+
+    async function searchDirect() {
+        const from = document.getElementById('directFrom').value;
+        const to = document.getElementById('directTo').value;
+        const result = await fetchJson(`/api/search/direct?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`);
+        document.getElementById('directResult').textContent = JSON.stringify(result, null, 2);
+    }
+
+    async function searchTransfer() {
+        const from = document.getElementById('transferFrom').value;
+        const to = document.getElementById('transferTo').value;
+        const minTransferMinutes = document.getElementById('minTransferMinutes').value;
+        const result = await fetchJson(`/api/search/transfer?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&minTransferMinutes=${encodeURIComponent(minTransferMinutes)}`);
+        document.getElementById('transferResult').textContent = JSON.stringify(result, null, 2);
+    }
+
+    async function createBooking() {
+        const body = {
+            trainCode: document.getElementById('bookTrainCode').value,
+            fromIndex: parseInt(document.getElementById('bookFromIndex').value, 10),
+            toIndex: parseInt(document.getElementById('bookToIndex').value, 10),
+            seats: parseInt(document.getElementById('bookSeats').value, 10),
+            passengerName: document.getElementById('bookName').value,
+            passengerEmail: document.getElementById('bookEmail').value
+        };
+
+        const result = await fetchJson('/api/book', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+
+        document.getElementById('bookingResult').textContent = JSON.stringify(result, null, 2);
+    }
+</script>
+</body>
+</html>
