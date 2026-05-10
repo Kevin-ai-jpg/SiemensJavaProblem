@@ -192,23 +192,27 @@ int dijkstra(String start, String end) {
 
 ## TSP idea (optional, advanced) – heuristics for many stations
 
-If the number of stations grows, finding the *best* route becomes complex.  
+If the number of stations grows, finding the _best_ route becomes complex.  
 A classic way to model this is as a **TSP-like problem**, and use heuristics:
 
-**PSO (Particle Swarm Optimization)**  
-- Each particle is a candidate route.  
+**PSO (Particle Swarm Optimization)**
+
+- Each particle is a candidate route.
 - Update velocity using personal best + global best.
 
-**SA (Simulated Annealing)**  
-- Start with a route, randomly swap, and sometimes accept worse moves.  
+**SA (Simulated Annealing)**
+
+- Start with a route, randomly swap, and sometimes accept worse moves.
 - Slowly reduce the “temperature”.
 
-**ACO / ACS / AS (Ant Colony methods)**  
-- Many ants build routes based on pheromones.  
-- Better routes deposit more pheromone.  
+**ACO / ACS / AS (Ant Colony methods)**
+
+- Many ants build routes based on pheromones.
+- Better routes deposit more pheromone.
 - ACS is a faster variant with stronger exploitation.
 
-**Mini pseudocode (PSO)**  
+**Mini pseudocode (PSO)**
+
 ```
 init swarm with random routes
 for iter in 1..N:
@@ -220,7 +224,8 @@ for iter in 1..N:
 return globalBest
 ```
 
-**Mini pseudocode (SA)**  
+**Mini pseudocode (SA)**
+
 ```
 route = random()
 T = T0
@@ -232,7 +237,8 @@ while T > Tmin:
 return route
 ```
 
-**Mini pseudocode (ACO / ACS / AS)**  
+**Mini pseudocode (ACO / ACS / AS)**
+
 ```
 init pheromones
 for iter in 1..N:
@@ -338,6 +344,15 @@ curl -s -X PUT http://localhost:8080/api/admin/stations/STX \
 ```
 curl -s -X DELETE http://localhost:8080/api/admin/stations/STX
 ```
+
+---
+
+## Screenshots
+
+> Place your images at the paths below (or rename the links).
+
+![Email header details](docs/images/email-header.png)
+![Booking confirmation email](docs/images/booking-confirmed.png)
 
 ---
 
