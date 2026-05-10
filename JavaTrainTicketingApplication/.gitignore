@@ -38,6 +38,6 @@ build/
 ### Mac OS ###
 .DS_Store
 
-# local config
-/src/main/resources/applicationSecrets.properties
+# local config (any location)
+**/applicationSecrets.properties
 trains.db
