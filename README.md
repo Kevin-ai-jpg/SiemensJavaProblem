@@ -1,6 +1,6 @@
 # Siemens Java Problem – Train Ticketing App (Spring Boot + SQLite)
 
-Hi! This is my student project for a train ticketing application. It’s a Spring Boot REST API with a small static HTML dashboard and a SQLite database.
+It’s a Spring Boot REST API with a small static HTML dashboard and a SQLite database.
 
 I tried to keep the code organized (controller → service → repo → model) and the project easy to run.
 
@@ -350,9 +350,7 @@ curl -s -X DELETE http://localhost:8080/api/admin/stations/STX
 ## Screenshots
 
 > Place your images at the paths below (or rename the links).
-
-![Email header details](docs/images/email-header.png)
-![Booking confirmation email](docs/images/booking-confirmed.png)
+You can find in the images directory 2 screenshots of how the email work.
 
 ---
 
